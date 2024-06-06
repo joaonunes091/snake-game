@@ -5,24 +5,34 @@ const box = 32;
 canvas.width = 19 * box;
 canvas.height = 19 * box;
 
+// Load images
 const ground = new Image();
-ground.src = "./images/food.png";
+ground.src = "./images/ground.png";  // Ensure this path is correct
 
 const foodImg = new Image();
-foodImg.src = "./images/ground.png";
+foodImg.src = "./images/food.png";  // Ensure this path is correct
 
-let snake = [];
-snake[0] = { x: 9 * box, y: 10 * box };
+let snake, food, score, d, game;
 
-let food = {
-    x: Math.floor(Math.random() * 17 + 1) * box,
-    y: Math.floor(Math.random() * 17 + 1) * box
-};
-
-let score = 0;
-let d;
-
+document.getElementById("retryBtn").addEventListener("click", startGame);
 document.addEventListener("keydown", direction);
+
+function startGame() {
+    snake = [];
+    snake[0] = { x: 9 * box, y: 10 * box };
+
+    food = {
+        x: Math.floor(Math.random() * 17 + 1) * box,
+        y: Math.floor(Math.random() * 17 + 1) * box
+    };
+
+    score = 0;
+    d = null;
+
+    clearInterval(game);
+    game = setInterval(draw, 100);
+    updateScore();
+}
 
 function direction(event) {
     if (event.keyCode == 37 && d != "RIGHT") {
@@ -45,9 +55,12 @@ function collision(head, array) {
     return false;
 }
 
+function updateScore() {
+    document.getElementById("score").innerText = `Score: ${score}`;
+}
+
 function draw() {
-    ctx.fillStyle = "black";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(ground, 0, 0);
 
     for (let i = 0; i < snake.length; i++) {
         ctx.fillStyle = i == 0 ? "green" : "white";
@@ -73,6 +86,7 @@ function draw() {
             x: Math.floor(Math.random() * 17 + 1) * box,
             y: Math.floor(Math.random() * 17 + 1) * box
         }
+        updateScore();
     } else {
         snake.pop();
     }
@@ -84,10 +98,7 @@ function draw() {
     }
 
     snake.unshift(newHead);
-
-    ctx.fillStyle = "white";
-    ctx.font = "45px Changa one";
-    ctx.fillText(score, 2 * box, 1.6 * box);
 }
 
-let game = setInterval(draw, 100);
+// Start the game for the first time
+startGame();
