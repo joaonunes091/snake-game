@@ -17,6 +17,12 @@ let snake, food, score, d, game;
 document.getElementById("retryBtn").addEventListener("click", startGame);
 document.addEventListener("keydown", direction);
 
+// Add event listeners for touch controls
+document.getElementById("upBtn").addEventListener("click", () => setDirection("UP"));
+document.getElementById("downBtn").addEventListener("click", () => setDirection("DOWN"));
+document.getElementById("leftBtn").addEventListener("click", () => setDirection("LEFT"));
+document.getElementById("rightBtn").addEventListener("click", () => setDirection("RIGHT"));
+
 function startGame() {
     snake = [];
     snake[0] = { x: 9 * box, y: 10 * box };
@@ -43,6 +49,19 @@ function direction(event) {
         d = "RIGHT";
     } else if (event.keyCode == 40 && d != "UP") {
         d = "DOWN";
+    }
+}
+
+// Function to set direction from touch controls
+function setDirection(dir) {
+    if (dir == "LEFT" && d != "RIGHT") {
+        d = dir;
+    } else if (dir == "UP" && d != "DOWN") {
+        d = dir;
+    } else if (dir == "RIGHT" && d != "LEFT") {
+        d = dir;
+    } else if (dir == "DOWN" && d != "UP") {
+        d = dir;
     }
 }
 
